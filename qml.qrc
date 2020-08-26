@@ -3,5 +3,7 @@
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>virtue.ttf</file>
+        <file>icons/information-button.svg</file>
+        <file>icons/magnifier.svg</file>
     </qresource>
 </RCC>

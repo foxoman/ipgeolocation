@@ -154,7 +154,7 @@ ApplicationWindow {
             }
 
             ToolButton {
-                text: "About"
+                icon.source: "/icons/information-button.svg"
                 onClicked: aboutDlg.open()
             }
         }
@@ -191,9 +191,9 @@ ApplicationWindow {
                 }
 
                 Button {
-                    text: "Search!"
-                    flat: true
-                    highlighted: true
+                    icon.source: "/icons/magnifier.svg"
+                    //flat: true
+                    //highlighted: true
                     onClicked: getJSON()
                 }
             }
