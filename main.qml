@@ -1,7 +1,7 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
-import QtQuick.Controls.Material 2.14
 import QtQuick.Layouts 1.14
+import QtQuick.Controls.Universal 2.14
 
 ApplicationWindow {
     visible: true
@@ -10,14 +10,8 @@ ApplicationWindow {
     width: 600
     height: 720
 
-    font.family: Qt.application.font.family
-
-    font.pixelSize: Qt.application.font.pixelSize
-
-    Material.accent: "#26c6da"
-    Material.background: "#505659"
-    Material.foreground: "#a3a4a6"
-    Material.primary: "#484e50"
+    //font.pixelSize: Qt.application.font.pixelSize
+    font.family: "Virtue"
 
     property string url: "http://ip-api.com/json/" + ip.text.trim(
                              ) + "?fields=status,message,continent,continentCode,country,countryCode,region,regionName,city,zip,lat,lon,timezone,offset,currency,isp,org,as,query,asname,reverse,proxy"
@@ -74,7 +68,6 @@ ApplicationWindow {
         anchors.centerIn: parent
 
         Pane {
-            Material.elevation: 1
             spacing: 16
 
             GridLayout {
@@ -138,8 +131,6 @@ ApplicationWindow {
     }
 
     header: ToolBar {
-        Material.elevation: 1
-        Material.foreground: "#a3a4a6"
         padding: 16
 
         RowLayout {
@@ -149,10 +140,12 @@ ApplicationWindow {
                 text: "# IP Geolocation"
                 textFormat: TextEdit.MarkdownText
                 Layout.fillWidth: true
+                Universal.foreground: Universal.Crimson
             }
 
             Label {
                 id: statusLabel
+                Universal.foreground: Universal.Yellow
             }
 
             ToolButton {
@@ -165,9 +158,6 @@ ApplicationWindow {
     Pane {
         anchors.fill: parent
         anchors.margins: 16
-        Material.elevation: 2
-
-        Material.background: Material.primaryColor
 
         ColumnLayout {
             anchors.fill: parent
@@ -179,12 +169,14 @@ ApplicationWindow {
                 Label {
                     text: "### Query:"
                     textFormat: TextEdit.MarkdownText
+                    Universal.foreground: Universal.Olive
                 }
 
                 TextField {
                     id: ip
                     placeholderText: "0.0.0.0 / www"
-                    Layout.minimumWidth: ip.contentWidth
+                    Layout.minimumWidth: ip.contentWidth + 20
+                    implicitWidth: 200
                     text: "www.foxoman.net"
                     selectByMouse: true
 
@@ -206,7 +198,7 @@ ApplicationWindow {
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 textFormat: TextEdit.MarkdownText
                 onLinkActivated: Qt.openUrlExternally(link)
-                color: Material.color(Material.Orange)
+                color: Universal.color(Universal.Orange)
                 padding: 16
             }
 
@@ -225,6 +217,7 @@ ApplicationWindow {
                     Label {
                         text: "**IP:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: query
@@ -234,6 +227,7 @@ ApplicationWindow {
                     Label {
                         text: "**Continent:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: continent + "_" + continentCode
@@ -243,6 +237,7 @@ ApplicationWindow {
                     Label {
                         text: "**Country:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: country + "_" + countryCode
@@ -252,6 +247,7 @@ ApplicationWindow {
                     Label {
                         text: "**Region:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: regionName + "_" + region
@@ -261,6 +257,7 @@ ApplicationWindow {
                     Label {
                         text: "**City:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: city
@@ -270,6 +267,7 @@ ApplicationWindow {
                     Label {
                         text: "**Latitude:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: lat
@@ -279,6 +277,7 @@ ApplicationWindow {
                     Label {
                         text: "**Longitudes:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: lon
@@ -288,6 +287,7 @@ ApplicationWindow {
                     Label {
                         text: "**TimeZone:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: timezone
@@ -297,6 +297,7 @@ ApplicationWindow {
                     Label {
                         text: "**Offset:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: offset
@@ -306,6 +307,7 @@ ApplicationWindow {
                     Label {
                         text: "**Currency:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: currency
@@ -315,6 +317,7 @@ ApplicationWindow {
                     Label {
                         text: "**ISP name:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
 
                     Label {
@@ -325,6 +328,7 @@ ApplicationWindow {
                     Label {
                         text: "**Organization name:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: org
@@ -334,6 +338,7 @@ ApplicationWindow {
                     Label {
                         text: "**AS number and organization:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: as
@@ -343,6 +348,7 @@ ApplicationWindow {
                     Label {
                         text: "**AS name (RIR):**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: asname
@@ -352,6 +358,7 @@ ApplicationWindow {
                     Label {
                         text: "**Reverse DNS of the IP:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: reverse
@@ -361,6 +368,7 @@ ApplicationWindow {
                     Label {
                         text: "**Proxy, VPN or Tor exit address:**"
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
                     Label {
                         text: proxy
@@ -371,15 +379,16 @@ ApplicationWindow {
                         text: "**Status:**"
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                         textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
                     }
 
                     Label {
                         text: (status === "success" ? status : status + " " + message)
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                         textFormat: TextEdit.MarkdownText
-                        color: (status === "success" ? Material.color(
-                                                           Material.Green) : Material.color(
-                                                           Material.Red))
+                        color: (status === "success" ? Universal.color(
+                                                           Universal.Green) : Universal.color(
+                                                           Universal.Red))
                     }
                 }
             }
