@@ -10,8 +10,8 @@ ApplicationWindow {
     width: 600
     height: 720
 
-    //font.pixelSize: Qt.application.font.pixelSize
-    font.family: "Virtue"
+    font.pixelSize: Qt.application.font.pixelSize
+    font.family: virtue.name
 
     property string url: "http://ip-api.com/json/" + ip.text.trim(
                              ) + "?fields=status,message,continent,continentCode,country,countryCode,region,regionName,city,zip,lat,lon,timezone,offset,currency,isp,org,as,query,asname,reverse,proxy"
@@ -58,6 +58,11 @@ ApplicationWindow {
             statusLabel.text = ""
         }
         xhr.send()
+    }
+
+    FontLoader {
+        id: virtue
+        source: "virtue.ttf"
     }
 
     Dialog {
