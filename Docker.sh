@@ -3,7 +3,7 @@
 
 systemctl start docker
 
-DOCKER_IMAGE=madmanfred/qt-webassembly:qt5.14-em1.39.7 #madmanfred/qt-webassembly:qt5.15-em1.39.10-remoteobjects
+DOCKER_IMAGE=madmanfred/qt-webassembly:qt5.15-em1.39.7 #madmanfred/qt-webassembly:qt5.14-em1.39.7 #madmanfred/qt-webassembly:qt5.15-em1.39.10-remoteobjects
 EMS_CACHE=$HOME/.emscripten_cache
 SOURCE_DIR=$PWD
 

@@ -9,6 +9,7 @@ ApplicationWindow {
 
     width: 600
     height: 720
+    minimumWidth: mainbar.implicitWidth
 
     font.pixelSize: Qt.application.font.pixelSize
     font.family: virtue.name
@@ -16,9 +17,14 @@ ApplicationWindow {
     property string url: "http://ip-api.com/json/" + ip.text.trim(
                              ) + "?fields=status,message,continent,continentCode,country,countryCode,region,regionName,city,zip,lat,lon,timezone,offset,currency,isp,org,as,query,asname,reverse,proxy"
 
+    readonly property string hereApiKey: "4KfBfqjOP7HxE0Vf8abraL1M3Hhrjm6iXLvr48d2hfs"
+    property string asSub: ""
+    property string asLink: ""
+    property string map: ""
+
     function getJSON() {
 
-        statusLabel.text = qsTr("Updating ..")
+        alert.show(qsTr("Updating .."))
 
         var xhr = new XMLHttpRequest
         xhr.open("GET", url)
@@ -28,7 +34,9 @@ ApplicationWindow {
                 var data = JSON.parse(xhr.responseText)
                 ipdata.clear()
 
-                console.log(JSON.stringify(data))
+                map = "[Google Map](https://maps.google.com/?q=" + data.lat + "," + data.lon + ")"
+                asSub = data.as.substr(0, data.as.indexOf(' '))
+                asLink = "[" + asSub + "]" + "(https://bgp.he.net/" + asSub + ")"
 
                 ipdata.append({
                                   "status": data.status,
@@ -55,7 +63,7 @@ ApplicationWindow {
                               })
             }
 
-            statusLabel.text = ""
+            alert.hide()
         }
         xhr.send()
     }
@@ -93,7 +101,7 @@ ApplicationWindow {
                 }
 
                 Label {
-                    text: qsTr("1.0")
+                    text: qsTr("1.1")
                 }
 
                 Label {
@@ -129,13 +137,32 @@ ApplicationWindow {
                 }
 
                 Label {
-                    text: qsTr("Qt for WebAssembly 5.14!")
+                    text: qsTr("Qt for WebAssembly 5.15!")
+                }
+
+                Label {
+                    text: qsTr("*API:*")
+                    textFormat: TextEdit.MarkdownText
+                }
+
+                Label {
+                    text: qsTr("http://ip-api.com")
+                }
+
+                Label {
+                    text: qsTr("*Map:*")
+                    textFormat: TextEdit.MarkdownText
+                }
+
+                Label {
+                    text: qsTr("www.here.com")
                 }
             }
         }
     }
 
     header: ToolBar {
+        id: mainbar
         padding: 16
 
         RowLayout {
@@ -147,26 +174,6 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 Universal.foreground: Universal.Crimson
             }
-
-            Label {
-                id: statusLabel
-                Universal.foreground: Universal.Yellow
-            }
-
-            ToolButton {
-                icon.source: "/icons/information-button.svg"
-                onClicked: aboutDlg.open()
-            }
-        }
-    }
-
-    Pane {
-        anchors.fill: parent
-        anchors.margins: 16
-
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 16
 
             RowLayout {
 
@@ -182,7 +189,6 @@ ApplicationWindow {
                     placeholderText: "0.0.0.0 / www"
                     Layout.minimumWidth: ip.contentWidth + 20
                     implicitWidth: 200
-                    text: "www.foxoman.net"
                     selectByMouse: true
 
                     onEditingFinished: {
@@ -192,11 +198,30 @@ ApplicationWindow {
 
                 Button {
                     icon.source: "/icons/magnifier.svg"
-                    //flat: true
-                    //highlighted: true
                     onClicked: getJSON()
                 }
             }
+
+            ToolButton {
+                icon.source: "/icons/information-button.svg"
+                onClicked: aboutDlg.open()
+            }
+        }
+    }
+
+    Pane {
+        anchors.fill: parent
+        anchors.margins: 16
+
+        ToolTip {
+            id: alert
+            anchors.centerIn: parent
+        }
+
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 16
+
             Label {
                 text: "**Query** can be a single ```IPv4/IPv6``` address or a ```domain``` name. If you don't supply a query the *current* IP address will be used."
                 Layout.fillWidth: true
@@ -204,11 +229,15 @@ ApplicationWindow {
                 textFormat: TextEdit.MarkdownText
                 onLinkActivated: Qt.openUrlExternally(link)
                 color: Universal.color(Universal.Orange)
-                padding: 16
+                padding: 8
             }
 
             ListView {
 
+                ScrollBar.vertical: ScrollBar {
+                    hoverEnabled: true
+                    active: hovered || pressed
+                }
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 model: ListModel {
@@ -270,23 +299,40 @@ ApplicationWindow {
                     }
 
                     Label {
-                        text: "**Latitude:**"
+                        text: "**Latitude / Longitudes:**"
                         textFormat: TextEdit.MarkdownText
                         Universal.foreground: Universal.Cobalt
                     }
                     Label {
-                        text: lat
+                        text: lat + " / " + lon + " :: " + map
                         textFormat: TextEdit.MarkdownText
+                        onLinkActivated: Qt.openUrlExternally(link)
+                        MouseArea {
+                            anchors.fill: parent
+                            acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
+                            cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+                        }
                     }
 
                     Label {
-                        text: "**Longitudes:**"
+                        text: "**Location Map:**"
                         textFormat: TextEdit.MarkdownText
                         Universal.foreground: Universal.Cobalt
                     }
-                    Label {
-                        text: lon
-                        textFormat: TextEdit.MarkdownText
+
+                    Image {
+                        id: ig
+                        source: encodeURI(
+                                    "https://image.maps.ls.hereapi.com/mia/1.6/mapview?apiKey="
+                                    + hereApiKey + "&c=" + lat + "," + lon)
+                        width: 240
+                        height: 320
+
+                        BusyIndicator {
+                            running: ig.status == Image.Loading
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
                     }
 
                     Label {
@@ -346,8 +392,14 @@ ApplicationWindow {
                         Universal.foreground: Universal.Cobalt
                     }
                     Label {
-                        text: as
+                        text: as + " :: " + asLink
                         textFormat: TextEdit.MarkdownText
+                        onLinkActivated: Qt.openUrlExternally(link)
+                        MouseArea {
+                            anchors.fill: parent
+                            acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
+                            cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+                        }
                     }
 
                     Label {
