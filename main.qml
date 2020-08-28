@@ -323,8 +323,9 @@ ApplicationWindow {
 
                     Image {
                         id: ig
-                        source: "https://image.maps.ls.hereapi.com/mia/1.6/mapview?apiKey="
-                                + hereApiKey + "&c=" + lat + "," + lon
+                        source: Qt.resolvedUrl(
+                                    "https://image.maps.ls.hereapi.com/mia/1.6/mapview?apiKey="
+                                    + hereApiKey + "&c=" + lat + "," + lon)
                         width: 240
                         height: 320
 
