@@ -9,6 +9,7 @@ ApplicationWindow {
 
     width: 600
     height: 720
+
     minimumWidth: mainbar.implicitWidth
 
     font.pixelSize: Qt.application.font.pixelSize
