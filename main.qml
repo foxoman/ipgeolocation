@@ -1,7 +1,7 @@
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Layouts 1.14
-import QtQuick.Controls.Universal 2.14
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import QtQuick.Controls.Universal 2.15
 
 ApplicationWindow {
     visible: true
@@ -14,6 +14,8 @@ ApplicationWindow {
 
     font.pixelSize: Qt.application.font.pixelSize
     font.family: virtue.name
+
+    Universal.accent: Universal.Crimson
 
     property string url: "http://ip-api.com/json/" + ip.text.trim(
                              ) + "?fields=status,message,continent,continentCode,country,countryCode,region,regionName,city,zip,lat,lon,timezone,offset,currency,isp,org,as,query,asname,reverse,proxy"
@@ -31,37 +33,67 @@ ApplicationWindow {
         xhr.open("GET", url)
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
-                console.log("xhr.status: " + xhr.status)
                 var data = JSON.parse(xhr.responseText)
                 ipdata.clear()
 
-                map = "[Google Map](https://maps.google.com/?q=" + data.lat + "," + data.lon + ")"
-                asSub = data.as.substr(0, data.as.indexOf(' '))
-                asLink = "[" + asSub + "]" + "(https://bgp.he.net/" + asSub + ")"
+                if (data.status === "success") {
+                    map = "[Google Map](https://maps.google.com/?q=" + data.lat
+                            + "," + data.lon + ")"
+                    asSub = data.as.substr(0, data.as.indexOf(' '))
+                    asLink = "[" + asSub + "]" + "(https://bgp.he.net/" + asSub + ")"
 
-                ipdata.append({
-                                  "status": data.status,
-                                  "query": data.query,
-                                  "continent": data.continent,
-                                  "continentCode": data.continentCode,
-                                  "country": data.country,
-                                  "countryCode": data.countryCode,
-                                  "regionName": data.regionName,
-                                  "region": data.region,
-                                  "city": data.city,
-                                  "lat": data.lat,
-                                  "lon": data.lon,
-                                  "timezone": data.timezone,
-                                  "offset": data.offset,
-                                  "currency": data.currency,
-                                  "isp": data.isp,
-                                  "org": data.org,
-                                  "as": data.as,
-                                  "asname": data.asname,
-                                  "reverse": data.reverse,
-                                  "proxy": data.proxy,
-                                  "message": data.message
-                              })
+                    ipdata.append({
+                                      "status": data.status,
+                                      "query": data.query,
+                                      "continent": data.continent,
+                                      "continentCode": data.continentCode,
+                                      "country": data.country,
+                                      "countryCode": data.countryCode,
+                                      "regionName": data.regionName,
+                                      "region": data.region,
+                                      "city": data.city,
+                                      "lat": data.lat,
+                                      "lon": data.lon,
+                                      "timezone": data.timezone,
+                                      "offset": data.offset,
+                                      "currency": data.currency,
+                                      "isp": data.isp,
+                                      "org": data.org,
+                                      "as": data.as,
+                                      "asname": data.asname,
+                                      "reverse": data.reverse,
+                                      "proxy": data.proxy,
+                                      "message": data.message
+                                  })
+                } else {
+                    map = ""
+                    asSub = ""
+                    asLink = ""
+
+                    ipdata.append({
+                                      "status": data.status,
+                                      "query": data.query,
+                                      "continent": "",
+                                      "continentCode": "",
+                                      "country": "",
+                                      "countryCode": "",
+                                      "regionName": "",
+                                      "region": "",
+                                      "city": "",
+                                      "lat": 0,
+                                      "lon": 0,
+                                      "timezone": "",
+                                      "offset": 0,
+                                      "currency": "",
+                                      "isp": "",
+                                      "org": "",
+                                      "as": "",
+                                      "asname": "",
+                                      "reverse": "",
+                                      "proxy": false,
+                                      "message": data.message
+                                  })
+                }
             }
 
             alert.hide()
@@ -250,6 +282,22 @@ ApplicationWindow {
                     columnSpacing: 12
 
                     Label {
+                        text: "**Status:**"
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        textFormat: TextEdit.MarkdownText
+                        Universal.foreground: Universal.Cobalt
+                    }
+
+                    Label {
+                        text: (status === "success" ? status : status + " " + message)
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        textFormat: TextEdit.MarkdownText
+                        color: (status === "success" ? Universal.color(
+                                                           Universal.Green) : Universal.color(
+                                                           Universal.Red))
+                    }
+
+                    Label {
                         text: "**IP:**"
                         textFormat: TextEdit.MarkdownText
                         Universal.foreground: Universal.Cobalt
@@ -431,22 +479,6 @@ ApplicationWindow {
                     Label {
                         text: proxy
                         textFormat: TextEdit.MarkdownText
-                    }
-
-                    Label {
-                        text: "**Status:**"
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        textFormat: TextEdit.MarkdownText
-                        Universal.foreground: Universal.Cobalt
-                    }
-
-                    Label {
-                        text: (status === "success" ? status : status + " " + message)
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        textFormat: TextEdit.MarkdownText
-                        color: (status === "success" ? Universal.color(
-                                                           Universal.Green) : Universal.color(
-                                                           Universal.Red))
                     }
                 }
             }
