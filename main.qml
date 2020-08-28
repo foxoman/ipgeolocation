@@ -323,9 +323,8 @@ ApplicationWindow {
 
                     Image {
                         id: ig
-                        source: encodeURI(
-                                    "https://image.maps.ls.hereapi.com/mia/1.6/mapview?apiKey="
-                                    + hereApiKey + "&c=" + lat + "," + lon)
+                        source: "https://image.maps.ls.hereapi.com/mia/1.6/mapview?apiKey="
+                                + hereApiKey + "&c=" + lat + "," + lon
                         width: 240
                         height: 320
 
