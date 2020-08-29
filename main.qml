@@ -372,11 +372,17 @@ ApplicationWindow {
                         width: 240
                         height: 320
 
+                        property string toolTipText: qsTr("Click to Open Location in Google Map!")
+                        ToolTip.text: toolTipText
+                        ToolTip.visible: toolTipText ? ma.containsMouse : false
+
                         MouseArea {
+                            id: ma
                             anchors.fill: parent
                             //acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
                             cursorShape: Qt.PointingHandCursor
                             onClicked: Qt.openUrlExternally(map)
+                            hoverEnabled: true
                         }
 
                         BusyIndicator {
