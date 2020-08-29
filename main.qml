@@ -37,8 +37,7 @@ ApplicationWindow {
                 ipdata.clear()
 
                 if (data.status === "success") {
-                    map = "[Google Map](https://maps.google.com/?q=" + data.lat
-                            + "," + data.lon + ")"
+                    map = "https://maps.google.com/?q=" + data.lat + "," + data.lon
                     asSub = data.as.substr(0, data.as.indexOf(' '))
                     asLink = "[" + asSub + "]" + "(https://bgp.he.net/" + asSub + ")"
 
@@ -63,9 +62,11 @@ ApplicationWindow {
                                       "asname": data.asname,
                                       "reverse": data.reverse,
                                       "proxy": data.proxy,
-                                      "message": data.message
+                                      "message": ""
                                   })
-                } else {
+                }
+
+                if (data.status === "fail") {
                     map = ""
                     asSub = ""
                     asLink = ""
@@ -353,14 +354,8 @@ ApplicationWindow {
                         Universal.foreground: Universal.Cobalt
                     }
                     Label {
-                        text: lat + " / " + lon + " :: " + map
+                        text: lat + " / " + lon
                         textFormat: TextEdit.MarkdownText
-                        onLinkActivated: Qt.openUrlExternally(link)
-                        MouseArea {
-                            anchors.fill: parent
-                            acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-                            cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-                        }
                     }
 
                     Label {
@@ -376,6 +371,13 @@ ApplicationWindow {
                                     + hereApiKey + "&c=" + lat + "," + lon)
                         width: 240
                         height: 320
+
+                        MouseArea {
+                            anchors.fill: parent
+                            //acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: Qt.openUrlExternally(map)
+                        }
 
                         BusyIndicator {
                             running: ig.status == Image.Loading
